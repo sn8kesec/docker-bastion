@@ -8,10 +8,10 @@ Thanks to all the developers that put the time and effort into the tools in this
 ### Usage:
 ```
 # For arm based deployments:
-docker run -it n0pesled/bastion:armv8
+docker run -it sn8kesec/bastion:armv8
 
 # For x86/x64 based deployments:
-docker run -it n0pesled/bastion:amd64
+docker run -it sn8kesec/bastion:amd64
 ```
 
 ### OS
@@ -74,6 +74,7 @@ BUG_REPORT_URL="https://bugs.debian.org/"
 - GCloud
 - AWS
 - Azure
+- kubectl
 
 ### Installed 3rd Party Tooling
 - [Powershell](https://github.com/PowerShell/PowerShell/)

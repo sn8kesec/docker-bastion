@@ -33,6 +33,6 @@ jobs:
         with:
           context: .
           file: arm8.Dockerfile
-          tags: n0pesled/bastion:armv8
+          tags: sn8kesec/bastion:armv8
           platforms: linux/arm64
           push: true

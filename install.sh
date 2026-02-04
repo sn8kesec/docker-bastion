@@ -17,12 +17,14 @@ case ${ARCH} in
         POWERSHELL_URL="https://github.com/PowerShell/PowerShell/releases/download/v7.4.2/powershell-7.4.2-linux-x64.tar.gz"
         GO_URL="https://dl.google.com/go/go1.22.2.linux-amd64.tar.gz"
         AWS_CLI_URL="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        KUBECTL_ARCH="amd64"
         ;;
     aarch64|arm64)
         echo "[+] Detected ARM64 architecture"
         POWERSHELL_URL="https://github.com/PowerShell/PowerShell/releases/download/v7.4.2/powershell-7.4.2-linux-arm64.tar.gz"
         GO_URL="https://dl.google.com/go/go1.22.2.linux-arm64.tar.gz"
         AWS_CLI_URL="https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
+        KUBECTL_ARCH="arm64"
         ;;
     *)
         echo "[-] Unsupported architecture: ${ARCH}"
@@ -67,6 +69,7 @@ apt-get install -y \
     docker.io \
     proxychains-ng \
     tcpdump \
+    iputils-ping \
     zsh
 
 # Change default shell to zsh
@@ -97,6 +100,12 @@ rm -rf awscliv2.zip
 echo "[+] Installing Azure CLI..."
 curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
+# Install kubectl
+echo "[+] Installing kubectl..."
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${KUBECTL_ARCH}/kubectl"
+chmod +x kubectl
+mv kubectl /usr/local/bin/kubectl
+
 # Install Metasploit
 echo "[+] Installing Metasploit Framework..."
 curl -fsSL https://apt.metasploit.com/metasploit-framework.gpg.key | gpg --dearmor | tee /usr/share/keyrings/metasploit.gpg
@@ -121,6 +130,14 @@ export PATH=$PATH:/usr/local/go/bin/
 echo "[+] Installing Node.js..."
 curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 apt-get install -y nodejs
+
+# Install uv and Python versions
+echo "[+] Installing uv..."
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="/root/.local/bin:$PATH"
+echo 'export PATH="/root/.local/bin:$PATH"' >> ~/.zshrc
+echo "[+] Installing Python 3.11, 3.12, and 3.13 with uv..."
+/root/.local/bin/uv python install 3.11 3.12 3.13
 
 # Setup Powerlevel10k
 echo "[+] Setting up Powerlevel10k..."
